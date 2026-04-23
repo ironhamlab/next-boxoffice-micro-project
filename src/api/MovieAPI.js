@@ -39,3 +39,9 @@ export async function getMovieDetailByMovieCd(movieCd) {
         return [];
     } 
 };
+
+
+/** 일별 박스오피스 목록 중 영화 이름 검색하여 영화 목록 반환 */
+export function getMovieBySearch(movieList, searchName) {
+    return movieList.filter(movie => movie.movieNm.includes(searchName));
+}

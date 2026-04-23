@@ -7,6 +7,7 @@ import { getMovieList } from "@/api/MovieAPI";
 
 export default function Movie() {
     const [movieList, setMovieList] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
     
     const router = useRouter();
 
@@ -18,9 +19,25 @@ export default function Movie() {
         fetchMovies();
     }, [])
 
+    const onClickHandler = () => {
+        router.push(`/movie/search?movieName=${searchValue}`)
+    }
+
     return (
-        <div>
-            {movieList.map(movie => <MovieCard key={movie.movieCd} movie={movie}/>)}
-        </div>
+        <>
+            <div>
+                <input
+                    type="search"
+                    name="movieName"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <button onClick={onClickHandler}>검색</button>
+            </div>
+            <div>
+                {movieList.map(movie => <MovieCard key={movie.movieCd} movie={movie}/>)}
+            </div>
+        </>
+
     )
 }
