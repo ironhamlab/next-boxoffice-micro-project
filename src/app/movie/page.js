@@ -25,18 +25,22 @@ export default function Movie() {
 
     return (
         <>
-            <div>
-                <input
-                    type="search"
-                    name="movieName"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                />
-                <button onClick={onClickHandler}>검색</button>
+            <div className="content-row">
+                <div>
+                    <input
+                        type="search"
+                        name="movieName"
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        onKeyDown={(e) => {if(e.key === 'Enter'){onClickHandler();}}}
+                    />
+                    <button onClick={onClickHandler}>검색</button>
+                </div>
+                <div>
+                    {movieList.map(movie => <MovieCard key={movie.movieCd} movie={movie}/>)}
+                </div>                
             </div>
-            <div>
-                {movieList.map(movie => <MovieCard key={movie.movieCd} movie={movie}/>)}
-            </div>
+
         </>
 
     )

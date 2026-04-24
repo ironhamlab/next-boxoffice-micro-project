@@ -8,31 +8,45 @@ export default function MovieSearchResult() {
     const searchParam = useSearchParams();
     const movieName = searchParam.get('movieName')
     const [movieList, setMovieList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchAndFilter = async() => {
-            const allMovies = await getMovieList();
-
-            if (movieName) {
-                const filtereddata = getMovieBySearch(allMovies, movieName);
-                setMovieList(filtereddata);
-            } else {
-                setMovieList(allMovies);
+            setIsLoading(true);
+            try {
+                const allMovies = await getMovieList();
+                if (movieName) {
+                    const filtereddata = getMovieBySearch(allMovies, movieName);
+                    setMovieList(filtereddata);
+                } else {
+                    setMovieList(allMovies);
+                }
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setIsLoading(false);
             }
         };
         
         fetchAndFilter();
     }, [movieName]);
 
+    if (isLoading) {
+        return <h2>데이터를 불러오는 중입니다...</h2>
+    }
+
     return (
         <>
-            <h1>'{movieName}' 검색 결과</h1>
-            <div>
-                {movieList.length > 0 ? (movieList.map (movie => <MovieCard key={movie.movieCd} movie={movie}/>)
-            ) : (
-                <p>검색 결과가 없습니다.</p>
-            )}
+            <div className="content-row">
+                <h1>'{movieName}' 검색 결과</h1>
+                <div>
+                    {movieList.length > 0 ? (movieList.map (movie => <MovieCard key={movie.movieCd} movie={movie}/>)
+                ) : (
+                    <p>검색 결과가 없습니다.</p>
+                )}
+                </div>                
             </div>
+
         </>
     )
 }
